@@ -1,0 +1,42 @@
+[package]
+name = "engine"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+
+baum = { path = "../baum", features = [ "serde" ] }
+imagine = { path = "../imagine" }
+common = { path = "../common", features = [ "image", "serde" ] }
+
+serde = { version = "1.0", features = [ "derive" ] }
+serde_json = "1.0"
+
+# wasm specific
+wasm-bindgen = { version = "0.2.84", optional = true }
+serde-wasm-bindgen = { version = "0.5.0", optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+
+# logging
+log = { version = "0.4.17", features = [ "std", "serde", "kv_unstable_std", "kv_unstable_sval", "kv_unstable_serde" ] }
+console_log = { version = "1", features = ["color"], optional = true }
+
+[features]
+default = []
+wasm = [
+    "imagine/wasm",
+    "common/wasm",
+    "dep:console_log",
+    "dep:wasm-bindgen",
+    "dep:serde-wasm-bindgen",
+    "dep:console_error_panic_hook"
+]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[build]
+target = "wasm32-unknown-unknown"

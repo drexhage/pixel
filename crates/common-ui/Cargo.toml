@@ -1,0 +1,21 @@
+[package]
+name = "common-ui"
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+common = { path = "../common" }
+wasm-bindgen = { version = "0.2.84", optional = true }
+
+[features]
+default = [ "wasm" ]
+wasm = [ "dep:wasm-bindgen", "common/wasm" ]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
