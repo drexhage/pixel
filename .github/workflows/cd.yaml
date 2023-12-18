@@ -46,10 +46,11 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build and pack wasm
         run: |
-          wasm-pack build 'crates/${{ matrix.crates }}' \
-            --features wasm \
+          wasm-pack build \
+            --scope '${{ github.repository_owner }}' \
             --target web \
-            --scope '${{ github.repository_owner }}'
+            'crates/${{ matrix.crates }}' \
+            --features wasm
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
