@@ -10,7 +10,6 @@ export default defineConfig({
 		wasm(),
 		topLevelAwait(),
 		//wasmPack(['../crates/engine', '../crates/common-ui'])
-		wasmPack(['@drexhage/engine', '@drexhage/common-ui'])
 	],
 	server: {
 		fs: {
