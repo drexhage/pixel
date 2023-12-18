@@ -85,8 +85,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo '@drexhage:registry=https://npm.pkg.github.com' > .npmrc
           cd frontend
+          echo '//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}' >> .npmrc
           npm install
           npm run build
       - name: Deploy artifacts
