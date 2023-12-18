@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-publish-wasm]
     permissions:
-      contents: read
+      contents: write
       packages: read
     steps:
       - name: Checkout repository
