@@ -47,6 +47,7 @@ jobs:
       - name: Build and pack wasm
         run: |
           wasm-pack build 'crates/${{ matrix.crates }}' \
+            --features wasm \
             --target web \
             --scope '${{ github.repository_owner }}'
       - name: Setup Node
