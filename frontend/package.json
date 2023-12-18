@@ -12,8 +12,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"dependencies": {
-		"@drexhage/engine": "^0.0.1",
-		"@drexhage/common-ui": "^0.0.1",
+		"@drexhage/engine": "latest",
+		"@drexhage/common-ui": "latest",
 		"vite-plugin-top-level-await": "^1.3.1",
 		"vite-plugin-wasm": "^3.2.2"
 	},
