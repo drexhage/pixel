@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ColorScheme, colorScheme, systemLightScheme } from '../color';
+	import { base } from '$app/paths';
 
 	let cssFile = 'light';
 	$: cssFile =
@@ -8,7 +9,7 @@
 
 <svelte:head>
 	<meta name="color-scheme" content={$colorScheme} />
-	<link rel="stylesheet" href={`/theme/${cssFile}.css`} />
+	<link rel="stylesheet" href={`${base}/theme/${cssFile}.css`} />
 </svelte:head>
 
 <slot />

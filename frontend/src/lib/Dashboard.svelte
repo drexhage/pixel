@@ -4,15 +4,16 @@
 	import Card from './generic/Card.svelte';
 	import VisualSwitch from './generic/VisualSwitch.svelte';
 	import ButtonColorScheme from './generic/ButtonColorScheme.svelte';
+	import { base } from '$app/paths';
 
 	skeleton.set(false);
 
 	function newProject(w, h) {
 		return () => {
 			if (orientation == 'horizontal') {
-				location.href = `/editor?w=${w}&h=${h}`;
+				location.href = `${base}/editor?w=${w}&h=${h}`;
 			} else {
-				location.href = `/editor?w=${h}&h=${w}`;
+				location.href = `${base}/editor?w=${h}&h=${w}`;
 			}
 		};
 	}
