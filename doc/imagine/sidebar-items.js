@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BlendMode","DtoTransformError","ImageSource"],"fn":["generate_blender"],"struct":["Image","ImageDto","SoftwareBlender"],"trait":["Blender"]};
