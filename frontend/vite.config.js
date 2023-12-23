@@ -8,7 +8,7 @@ export default defineConfig({
 	plugins: [
 		sveltekit(),
 		wasm(),
-		topLevelAwait(),
+		topLevelAwait()
 		//wasmPack(['../crates/engine', '../crates/common-ui'])
 	],
 	server: {

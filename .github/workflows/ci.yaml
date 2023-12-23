@@ -49,6 +49,11 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
       - name: Perform svelte linting
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_PATH: "/${{ github.event.repository.name }}"
         run: |
           cd frontend
+          echo '//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}' >> .npmrc
+          npm install
           npm run lint
