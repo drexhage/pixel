@@ -54,13 +54,7 @@ pub struct EngineContext {
     pub(crate) idx: Option<usize>,
 }
 
-///
-/// The WASM-facing interface goes here
-///
-// #[cfg(target_family = "wasm")]
-// #[wasm_bindgen]
 impl Engine {
-    // #[wasm_bindgen(constructor)]
     pub fn new(width: u32, height: u32) -> Engine {
         log::info!("Initializing session");
         let size = Size { width, height };
@@ -149,9 +143,8 @@ impl Engine {
             }
             Ok(result)
         } else {
-            // first step always has to be project/create
             Err(EngineError::user_error(
-                "Create project has to be first step",
+                "First step always has to be project/create",
             ))
         }
     }

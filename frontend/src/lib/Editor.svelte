@@ -1,13 +1,28 @@
-<script lang="ts">
-	import { CanvasDisplay } from '@drexhage/common-ui';
-	import { session, skeleton, ui } from '../store';
-	import { colorScheme, startListen } from '../color';
+<script>
+	import { current, history, session, skeleton } from '../store';
 	import Desktop from '../lib/layout/Desktop.svelte';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
-	$: localStorage.setItem('colorscheme', $colorScheme);
 	const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-	const urlParams = new URLSearchParams(window.location.search);
+	const urlObj = new URL(window.location.toString());
+
+	function moveHome() {
+		let session = { idx: $current, history: $history, preview: null };
+		let key = `local/default`;
+		let item = localStorage.getItem(key);
+		if (item) {
+			if (confirm('Replace stored local project with the current one?')) {
+				localStorage.setItem(key, JSON.stringify(session));
+			}
+		}
+		window.location = `${base}/`;
+	}
+
+	// save editing history when leaving
+	window.onbeforeunload = function () {
+		return 'Are you sure?';
+	};
 
 	async function loadUrlAsLayer(url) {
 		return new Promise((resolve, reject) => {
@@ -29,19 +44,28 @@
 	}
 
 	let init = async () => {
-		let w = parseInt(urlParams.get('w')) || 2000;
-		let h = parseInt(urlParams.get('h')) || 1500;
-		urlParams.delete('w');
-		urlParams.delete('h');
-		await delay(500);
-		await session.init(w, h);
+		let w = parseInt(urlObj.searchParams.get('w')) || 2000;
+		let h = parseInt(urlObj.searchParams.get('h')) || 1500;
+		let source = urlObj.searchParams.get('local');
+		if (source) {
+			let localSession = JSON.parse(localStorage.getItem(`local/${source}`));
+			if (localSession) {
+				await session.from_history(localSession.idx, localSession.history);
+			} else {
+				await session.init(w, h);
+			}
+		} else {
+			urlObj.searchParams.delete('w');
+			urlObj.searchParams.delete('h');
+			window.history.pushState(undefined, undefined, urlObj.href); // remove search params
+			await delay(500);
+			await session.init(w, h);
+		}
 		skeleton.set(false);
-		ui.set(new CanvasDisplay(w, h, 100, 100, 10));
 	};
 	onMount(async () => {
 		init();
-		startListen();
 	});
 </script>
 
-<Desktop />
+<Desktop {moveHome} />

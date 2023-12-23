@@ -74,6 +74,7 @@ async function createSession() {
 	let prev;
 
 	function update() {
+		blender.set(engine.blender);
 		layers.set(engine.content);
 		history.set(engine.history);
 		current.set(engine.current);
@@ -85,7 +86,7 @@ async function createSession() {
 	}
 
 	return {
-		init: async function (w: number, h: number) {
+		init: async function (w: number, h: number): Promise<void> {
 			await init_ui();
 			wasm = await init_engine();
 			width = w;
@@ -104,7 +105,16 @@ async function createSession() {
 			if (idx) {
 				focused.set([idx]);
 			}
-			blender.set(engine.blender);
+			ui.set(new CanvasDisplay(w, h, 100, 100, 10));
+			update();
+		},
+		from_history: async function (idx: number, his: Tree<any>): Promise<void> {
+			await init_ui();
+			wasm = await init_engine();
+			engine = Engine.reconstruct(idx, his);
+			width = engine.size.width;
+			height = engine.size.height;
+			ui.set(new CanvasDisplay(width, height, 100, 100, 10));
 			update();
 		},
 		switch_blender: function (type) {

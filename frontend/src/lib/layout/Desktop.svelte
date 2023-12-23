@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { blender, layers, redoable, session, ui, undoable } from '../../store';
 	import InteractiveCanvas from '../canvas/InteractiveCanvas.svelte';
 	import Button from '../generic/Button.svelte';
@@ -11,6 +11,8 @@
 	import Separator from '../generic/Separator.svelte';
 	import Selection from '../generic/Selection.svelte';
 	import Dialog from '../generic/Dialog.svelte';
+
+	export let moveHome = () => {};
 
 	function base64ToArrayBuffer(base64) {
 		let binaryString = window.atob(base64);
@@ -27,7 +29,7 @@
 		let canvas = document.createElement('canvas');
 		canvas.width = width;
 		canvas.height = height;
-		let ctx = canvas.getContext('2d')!;
+		let ctx = canvas.getContext('2d');
 		ctx.putImageData(image_data, 0, 0);
 		let base64 = canvas.toDataURL('image/png').slice('data:image/png;base64,'.length);
 		return base64;
@@ -92,6 +94,7 @@
 	<div id="sidebar">
 		<div />
 		<div class="top-tooling">
+			<Button on:click={moveHome} title="home"><i class="fa fa-home" /></Button>
 			<Selection
 				value={$blender}
 				on:change={(e) => session.switch_blender(e.target['value'])}
@@ -150,7 +153,7 @@
 
 	.top-tooling {
 		display: grid;
-		grid-template-columns: 1fr auto auto;
+		grid-template-columns: auto 1fr auto auto;
 		align-content: center;
 		justify-content: space-between;
 		gap: 5px;

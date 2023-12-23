@@ -15,7 +15,6 @@
 		try {
 			clamped = session.content_as_bytes();
 		} catch (e) {
-			console.log(e);
 			return;
 		}
 		let imageData = new ImageData(clamped, $ui.img_size.width, $ui.img_size.height);

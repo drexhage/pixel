@@ -1,11 +1,14 @@
+use std::collections::HashMap;
+
+use baum::{Cursor, Tree};
 use common::Size;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
-use crate::{Engine, EngineError, Step};
+use crate::{moment::Moment, Engine, EngineError, Step};
 
 #[wasm_bindgen(start)]
 fn start() {
-    //std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+    std::panic::set_hook(Box::new(console_error_panic_hook::hook));
     console_log::init_with_level(log::Level::Trace).expect("Failed to init logging");
 }
 
@@ -14,6 +17,25 @@ impl Engine {
     #[wasm_bindgen(constructor)]
     pub fn _new(width: u32, height: u32) -> Engine {
         Self::new(width, height)
+    }
+
+    #[wasm_bindgen(js_name = reconstruct)]
+    pub fn _reconstruct(point: usize, val: JsValue) -> Result<Engine, EngineError> {
+        let mut history: Tree<Moment> =
+            serde_wasm_bindgen::from_value(val).map_err(EngineError::from)?;
+        let mut cursor = Cursor::new(&mut history, point)?;
+        let mut steps = vec![];
+        steps.push(cursor.value().data.clone());
+        while !cursor.is_on_root() {
+            cursor.go_up();
+            steps.push(cursor.value().data.clone());
+        }
+        steps.reverse();
+        let mut engine = Engine::reconstruct(&steps, HashMap::new())?;
+        // super danger
+        engine.history = history;
+        engine.current = point;
+        return Ok(engine);
     }
 
     pub fn perform_step(&mut self, val: JsValue) -> Result<Option<usize>, EngineError> {

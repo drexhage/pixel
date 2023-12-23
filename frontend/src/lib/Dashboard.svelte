@@ -5,6 +5,7 @@
 	import VisualSwitch from './generic/VisualSwitch.svelte';
 	import ButtonColorScheme from './generic/ButtonColorScheme.svelte';
 	import { base } from '$app/paths';
+	import { onMount } from 'svelte';
 
 	skeleton.set(false);
 
@@ -19,7 +20,28 @@
 		};
 	}
 
-	const sizes = [
+	function openLocalProject(title) {
+		return () => {
+			location.href = `${base}/editor?local=${title}`;
+		};
+	}
+
+	let locals = [];
+
+	onMount(() => {
+		for (var i = 0, len = localStorage.length; i < len; ++i) {
+			let key = localStorage.key(i);
+			if (!key.startsWith('local/')) continue;
+			let localSession = JSON.parse(localStorage.getItem(key));
+			locals.push({
+				title: key.split('/')[1],
+				preview: localSession['preview']
+			});
+		}
+		locals = locals;
+	});
+
+	let sizes = [
 		{
 			title: 'instagram',
 			w: 1080,
@@ -75,6 +97,12 @@
 				/>
 			</div>
 			<div class="create-cards">
+				{#each locals as local}
+					<Button title={local.title} on:click={openLocalProject(local.title)}>
+						<span class="size">{local.title}</span><br />
+						<span class="title">local project</span>
+					</Button>
+				{/each}
 				{#each sizes as size}
 					<Button title={size.title} on:click={newProject(size.w, size.h)}>
 						<span class="size"
