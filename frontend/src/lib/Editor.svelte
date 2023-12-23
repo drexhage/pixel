@@ -11,10 +11,8 @@
 		let session = { idx: $current, history: $history, preview: null };
 		let key = `local/default`;
 		let item = localStorage.getItem(key);
-		if (item) {
-			if (confirm('Replace stored local project with the current one?')) {
-				localStorage.setItem(key, JSON.stringify(session));
-			}
+		if (!item || confirm('Replace stored local project with the current one?')) {
+			localStorage.setItem(key, JSON.stringify(session));
 		}
 		window.location = `${base}/`;
 	}
