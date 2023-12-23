@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { skeleton } from '../store';
 	import Button from './generic/Button.svelte';
 	import Card from './generic/Card.svelte';
@@ -10,15 +10,16 @@
 
 	function newProject(w, h) {
 		return () => {
-			if (orientation == 'horizontal') {
-				location.href = `${base}/editor?w=${w}&h=${h}`;
-			} else {
-				location.href = `${base}/editor?w=${h}&h=${w}`;
+			if (orientation == 'vertical') {
+				let temp = w;
+				w = h;
+				h = temp;
 			}
+			location.href = `${base}/editor?w=${w}&h=${h}`;
 		};
 	}
 
-	const sizes: { title: string; w: number; h: number }[] = [
+	const sizes = [
 		{
 			title: 'instagram',
 			w: 1080,

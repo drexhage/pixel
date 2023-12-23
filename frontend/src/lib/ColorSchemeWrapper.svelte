@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { ColorScheme, colorScheme, systemLightScheme } from '../color';
 	import { base } from '$app/paths';
 
